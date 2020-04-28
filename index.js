@@ -18,12 +18,16 @@ document.addEventListener('DOMContentLoaded',function(){
         "full_time": form.elements["full_time"].checked
       }
 
+  // feature/tesk 3
     fetch(getUri(formData))
     .then(function(response) {
       return response.json();
     })
     .then(function(myJson) {
-      console.log(myJson);
+      document.querySelector("#job-pannel").innerHTML = ""
+      myJson.map(function(data){
+        document.querySelector("#job-pannel").innerHTML += postHTML(data)
+      });
     });
   })
 
@@ -31,5 +35,20 @@ document.addEventListener('DOMContentLoaded',function(){
     return `https://still-spire-37210.herokuapp.com/positions.json?description=${data.description}&location=${data.location}&full_time=${data.full_time}`
   }
 
+  function postHTML(data){
+    return `<tr>
+    <td>
+      <h4><a href="${data.url}">${data.title}</a></h4>
+      <p class="source">
+      <a class="company" href="${data.company_url}">${data.company}</a>
+      –
+      <strong class="fulltime">${data.type}</strong>
+      </p>
+    </td>
+    <td class="meta">
+      <span class="location">${data.location}</span>
+    </td>
+  </tr>`
+  }
 
 })
