@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded',function(){
 
-
   // feature/task 1
   document.querySelector('#navbar-burger').addEventListener('click', function(){
     document.querySelector('#navbar-burger').classList.toggle("is-active")
@@ -13,6 +12,31 @@ document.addEventListener('DOMContentLoaded',function(){
   let counter = 2
   let tableContent = document.querySelector("#job-pannel")
   let formData = {}
+
+  tableContent.innerHTML = ""
+  fetch(getUri(formData))
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    myJson.map(function(data){
+      tableContent.innerHTML += postHTML(data)
+    });
+    if(myJson.length === 50)
+    {
+      fetch(getUri(formData) + pagination(getUri(formData)))
+      .then(function(resp) {
+        return resp.json();
+      })
+      .then(function(p2) {
+        if(p2.length > 0){
+          document.querySelector("a.pagination-next").removeAttribute("disabled");
+        }
+      })
+    }    
+  });
+  console.log(getUri(formData))
+
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -46,17 +70,22 @@ document.addEventListener('DOMContentLoaded',function(){
             document.querySelector("a.pagination-next").removeAttribute("disabled");
           }
         })
-      }    
+      }   
     });
+  });
 
+  // feature/task 4
     document.querySelector("a.pagination-next").addEventListener('click', function(e){
       e.preventDefault();
+      console.log("clicked")
+      console.log(formData)
       if(document.querySelector("a[disabled]") === null){
         fetch(getUri(formData) + pagination(getUri(formData)))
         .then(function(response) {
           return response.json();
         })
         .then(function(myJson) {
+          console.log(getUri(formData) + pagination(getUri(formData)))
           myJson.map(function(data){
             tableContent.innerHTML += postHTML(data)
           });
@@ -68,7 +97,7 @@ document.addEventListener('DOMContentLoaded',function(){
       }
     })
 
-  })
+
 
   function getUri(data){
     let searchUrl = Object.keys(data).reduce(function(accu, e){
@@ -114,4 +143,5 @@ document.addEventListener('DOMContentLoaded',function(){
               </td>
             </tr>`
   }
+
 })
