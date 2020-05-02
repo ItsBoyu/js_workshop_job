@@ -14,23 +14,16 @@ document.addEventListener('DOMContentLoaded',function(){
   let tableContent = document.querySelector("#job-pannel")
   let formData = {}
 
-
   form.addEventListener('submit', function(e){
     e.preventDefault();
     document.querySelector("a.pagination-next").setAttribute("disabled","")
     counter = 2
-    // let description = form.elements["description"].value
-    // let location = form.elements["location"].value
-    // let full_time = form.elements["full_time"].checked
-    // let formData = [ description, location, full_time ]
-    // console.log(description.length)
     formData = 
       {
         "description": form.elements["description"].value,
         "location": form.elements["location"].value,
         "full_time": form.elements["full_time"].checked
       }
-      // console.log(/.json/.test(getUri(formData).slice(-5)))
 
   // feature/task 3
     fetch(getUri(formData))
@@ -42,7 +35,6 @@ document.addEventListener('DOMContentLoaded',function(){
       myJson.map(function(data){
         tableContent.innerHTML += postHTML(data)
       });
-      // console.log(getUri(formData) + `&page=${counter}`)
       if(myJson.length === 50)
       {
         fetch(getUri(formData) + pagination(getUri(formData)))
@@ -54,8 +46,7 @@ document.addEventListener('DOMContentLoaded',function(){
             document.querySelector("a.pagination-next").removeAttribute("disabled");
           }
         })
-      }
-    
+      }    
     });
 
     document.querySelector("a.pagination-next").addEventListener('click', function(e){
@@ -66,13 +57,10 @@ document.addEventListener('DOMContentLoaded',function(){
           return response.json();
         })
         .then(function(myJson) {
-          console.log(getUri(formData) + pagination(getUri(formData)))
           myJson.map(function(data){
             tableContent.innerHTML += postHTML(data)
           });
           if(myJson.length < 50){
-            console.log("less than 50")
-            console.log(counter)
             document.querySelector("a.pagination-next").setAttribute("disabled", "")
           }
           counter++;
@@ -81,7 +69,6 @@ document.addEventListener('DOMContentLoaded',function(){
     })
 
   })
-
 
   function getUri(data){
     let searchUrl = Object.keys(data).reduce(function(accu, e){
@@ -102,11 +89,6 @@ document.addEventListener('DOMContentLoaded',function(){
     }else{
       return url + "?" + searchUrl
     }
-
-    // if(data.full_time){
-    //   return `https://still-spire-37210.herokuapp.com/positions.json?description=${data.description}&location=${data.location}&full_time=on`
-    // }else{
-    // return `https://still-spire-37210.herokuapp.com/positions.json?description=${data.description}&location=${data.location}&page=`}
   }
 
   function pagination(s){
@@ -132,5 +114,4 @@ document.addEventListener('DOMContentLoaded',function(){
               </td>
             </tr>`
   }
-
 })
