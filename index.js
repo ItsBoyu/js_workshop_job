@@ -35,8 +35,6 @@ document.addEventListener('DOMContentLoaded',function(){
       })
     }    
   });
-  console.log(getUri(formData))
-
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -77,15 +75,12 @@ document.addEventListener('DOMContentLoaded',function(){
   // feature/task 4
     document.querySelector("a.pagination-next").addEventListener('click', function(e){
       e.preventDefault();
-      console.log("clicked")
-      console.log(formData)
       if(document.querySelector("a[disabled]") === null){
         fetch(getUri(formData) + pagination(getUri(formData)))
         .then(function(response) {
           return response.json();
         })
         .then(function(myJson) {
-          console.log(getUri(formData) + pagination(getUri(formData)))
           myJson.map(function(data){
             tableContent.innerHTML += postHTML(data)
           });
@@ -96,8 +91,6 @@ document.addEventListener('DOMContentLoaded',function(){
         })
       }
     })
-
-
 
   function getUri(data){
     let searchUrl = Object.keys(data).reduce(function(accu, e){
@@ -143,5 +136,4 @@ document.addEventListener('DOMContentLoaded',function(){
               </td>
             </tr>`
   }
-
 })
